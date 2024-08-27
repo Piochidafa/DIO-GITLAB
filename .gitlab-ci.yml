@@ -1,0 +1,23 @@
+stages:
+  - build
+  - deploy
+
+criar_imagem:
+    stage: build
+    script:
+      - docker build -t myaccount/app-dio:latest . 
+      - docker push myaccount/app-dio:latest
+
+    tags:
+      - shell
+
+
+exec_image:
+    stage: deploy
+    needs:
+      - criar_imagem
+    script: 
+      - docker run -d --name webserver -p 80:80 myaccount/app-dio:latest
+      
+    tags:
+      - shell
